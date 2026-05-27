@@ -15,6 +15,11 @@ export const metadata: Metadata = {
     "DevOps"
   ],
   authors: [{ name: "Yashwanth Puligilla" }],
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+    shortcut: "/favicon.png",
+  },
   openGraph: {
     title: "Yashwanth Puligilla | AI & Cloud Developer Command Center",
     description: "Cinematic, interactive game-inspired console portfolio of Yashwanth Puligilla. Cyberpunk dashboard, terminal commands, and AI assistant orb.",
