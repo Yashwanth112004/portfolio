@@ -1,65 +1,138 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import BootSequence from "@/components/BootSequence";
+import ParticleCanvas from "@/components/ParticleCanvas";
+import ConsoleHUD from "@/components/ConsoleHUD";
+import AidaOrb from "@/components/AidaOrb";
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Projects from "@/components/Projects";
+import Skills from "@/components/Skills";
+import Achievements from "@/components/Achievements";
+import Certifications from "@/components/Certifications";
+import Blog from "@/components/Blog";
+import GithubSection from "@/components/Github";
+import Contact from "@/components/Contact";
+import BugDefender from "@/components/BugDefender";
+import { audio } from "@/utils/audio";
 
 export default function Home() {
+  const [hasBooted, setHasBooted] = useState(false);
+  const [crtActive, setCrtActive] = useState(true);
+  const [soundActive, setSoundActive] = useState(true);
+  const [matrixActive, setMatrixActive] = useState(false);
+  const [agentModeActive, setAgentModeActive] = useState(false);
+  const [gameOpen, setGameOpen] = useState(false);
+  const [xp, setXp] = useState(0);
+
+  const handleTriggerAgentMode = () => {
+    setAgentModeActive(true);
+  };
+
+  const handleBootComplete = (soundEnabled: boolean) => {
+    setSoundActive(soundEnabled);
+    setHasBooted(true);
+    if (soundEnabled) {
+      audio.setMuted(false);
+      audio.startAmbient();
+    }
+  };
+
+  const handleTriggerMatrix = () => {
+    setMatrixActive((prev) => !prev);
+  };
+
+  const handleUnlockAchievement = () => {
+    // No-op to disable gamified achievement popups
+  };
+
+  const handleAddXP = (amount: number) => {
+    setXp((prev) => Math.min(prev + amount, 20000));
+  };
+
+  // Scroll smoothly to target element ID
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className={`min-h-screen relative bg-[#060608] text-[#e2e8f0] font-sans selection:bg-[#00f0ff] selection:text-black ${
+      crtActive ? "crt-effect" : ""
+    }`}>
+      {/* Background canvas layer */}
+      <ParticleCanvas matrixActive={matrixActive} agentModeActive={agentModeActive} />
+
+      <AnimatePresence>
+        {!hasBooted && (
+          <BootSequence onComplete={handleBootComplete} />
+        )}
+      </AnimatePresence>
+
+      {hasBooted && (
+        <div className="relative z-10 flex flex-col min-h-screen">
+          
+          {/* Diagnostic Grid overlays */}
+          <div className="fixed inset-0 digital-grid pointer-events-none opacity-10 z-0" />
+          {crtActive && <div className="fixed inset-0 pointer-events-none crt-scanlines opacity-25 z-30 bg-[#060608]" />}
+
+          {/* Persistent advisors HUD and Orb assistants */}
+          <AidaOrb />
+          <ConsoleHUD
+            crtActive={crtActive}
+            setCrtActive={setCrtActive}
+            soundActive={soundActive}
+            setSoundActive={setSoundActive}
+            onTriggerMatrix={handleTriggerMatrix}
+            onUnlockAchievement={handleUnlockAchievement}
+            onOpenGame={() => setGameOpen(true)}
+            onTriggerAgentMode={handleTriggerAgentMode}
+            xp={xp}
+          />
+
+          {/* Main Dashboard Panel views */}
+          <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 space-y-4">
+            <Hero 
+              onExploreProjects={() => scrollToSection("projects")} 
+              onExploreContact={() => scrollToSection("contact")} 
+              agentModeActive={agentModeActive}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <About />
+            <Skills />
+            <Projects />
+            <Certifications />
+            <Blog />
+            <GithubSection />
+            <Achievements />
+            <Contact onUnlockAchievement={handleUnlockAchievement} />
+          </main>
+
+          {/* Global console footer */}
+          <footer className="w-full max-w-7xl mx-auto py-8 px-4 md:px-8 border-t border-slate-950 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-mono-term text-slate-500 relative z-10 select-none">
+            <div>
+              <span>DESIGNED BY YASHWANTH PULIGILLA // OPERATOR CODE: ALPHA_01</span>
+            </div>
+            <div>
+              <span>SECURE COMPILATION SYSTEM v2.8 // CURRENT TIME: 2026-05-27</span>
+            </div>
+          </footer>
+
         </div>
-      </main>
+      )}
+
+      {/* Bug Defender Game Overlay */}
+      <AnimatePresence>
+        {gameOpen && (
+          <BugDefender
+            onClose={() => setGameOpen(false)}
+            onAddXP={handleAddXP}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

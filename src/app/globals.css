@@ -1,26 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #060608;
+  --foreground: #e2e8f0;
+  --neon-cyan: #00f0ff;
+  --neon-cyan-dim: rgba(0, 240, 255, 0.35);
+  --neon-amber: #ffb000;
+  --neon-amber-dim: rgba(255, 176, 0, 0.35);
+  --neon-purple: #a855f7;
+  --neon-purple-dim: rgba(168, 85, 247, 0.35);
+  --neon-blue: #0066ff;
+  --neon-blue-dim: rgba(0, 102, 255, 0.35);
+  --terminal-green: #39ff14;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  overflow-x: hidden;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Typography Classes */
+.font-display {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.font-mono-term {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Glowing Neon Borders */
+.glow-border-cyan {
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.15), inset 0 0 8px rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+}
+
+.glow-border-cyan:hover {
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.3), inset 0 0 12px rgba(0, 240, 255, 0.15);
+  border: 1px solid rgba(0, 240, 255, 0.7);
+}
+
+.glow-border-amber {
+  box-shadow: 0 0 10px rgba(255, 176, 0, 0.15), inset 0 0 8px rgba(255, 176, 0, 0.1);
+  border: 1px solid rgba(255, 176, 0, 0.4);
+}
+
+.glow-border-amber:hover {
+  box-shadow: 0 0 18px rgba(255, 176, 0, 0.3), inset 0 0 12px rgba(255, 176, 0, 0.15);
+  border: 1px solid rgba(255, 176, 0, 0.7);
+}
+
+.glow-border-purple {
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.15), inset 0 0 8px rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.glow-border-purple:hover {
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.3), inset 0 0 12px rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.7);
+}
+
+/* Glowing Neon Text */
+.glow-text-cyan {
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.2);
+}
+
+.glow-text-amber {
+  text-shadow: 0 0 8px rgba(255, 176, 0, 0.5), 0 0 20px rgba(255, 176, 0, 0.2);
+}
+
+.glow-text-purple {
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.2);
+}
+
+.glow-text-green {
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.5), 0 0 20px rgba(57, 255, 20, 0.2);
+}
+
+/* Cyberpunk Scanner Line & Noise */
+.crt-effect {
+  position: relative;
+}
+
+.crt-effect::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 9999;
+  background-size: 100% 4px, 3px 100%;
+  pointer-events: none;
+}
+
+.crt-scanlines {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 240, 255, 0.08) 50%);
+  background-size: 100% 12px;
+  animation: scanlines-scroll 8s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes scanlines-scroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
+
+/* Cyberpunk Digital Grid Background */
+.digital-grid {
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
+}
+
+/* Custom Scrollbar styled for retro cyberpunk look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #060608;
+  border-left: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.7);
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: rgba(10, 10, 12, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-cyan {
+  background: rgba(6, 6, 8, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+.glass-panel-amber {
+  background: rgba(6, 6, 8, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 176, 0, 0.15);
+}
+
+/* Glitch Animation */
+@keyframes glitch-anim {
+  0% { clip-path: inset(40% 0 61% 0); transform: skew(0.3deg); }
+  20% { clip-path: inset(92% 0 1% 0); transform: skew(-0.5deg); }
+  40% { clip-path: inset(25% 0 58% 0); transform: skew(0.8deg); }
+  60% { clip-path: inset(80% 0 5% 0); transform: skew(-0.2deg); }
+  80% { clip-path: inset(11% 0 85% 0); transform: skew(0.4deg); }
+  100% { clip-path: inset(40% 0 61% 0); transform: skew(0deg); }
+}
+
+.glitch-hover:hover {
+  animation: glitch-anim 1s linear infinite alternate-reverse;
+}
+
+/* Matrix Code Rain Canvas helper */
+.matrix-overlay {
+  mix-blend-mode: color-dodge;
+  opacity: 0.12;
+}
+
+/* Custom terminal prompt styling */
+.cli-prompt::before {
+  content: "yashwanth@command-center:~$ ";
+  color: var(--neon-cyan);
+  font-weight: bold;
 }
